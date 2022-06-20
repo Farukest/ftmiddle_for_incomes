@@ -1,0 +1,16 @@
+#!/bin/sh
+[ -f @@DESTROOT@@/ftmiddle.conf ] && . @@DESTROOT@@/ftmiddle.conf
+
+: ${ftmiddle_home="@@DESTROOT@@"}
+: ${ftmiddle_config_dir="${ftmiddle_home}/configs"}
+: ${ftmiddle_script="${ftmiddle_home}/gateways2miners.py"}
+: ${ftmiddle_python="python3"}
+: ${ftmiddle_port=1681}
+
+cd ${ftmiddle_home}
+exec ${ftmiddle_python} \
+	${ftmiddle_script} \
+	-c ${ftmiddle_config_dir} \
+	-p ${ftmiddle_port} \
+	-d \
+	${ftmiddle_args}
