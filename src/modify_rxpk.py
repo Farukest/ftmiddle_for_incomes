@@ -77,9 +77,9 @@ class RXMetadataModification:
 
         if rxpk['size'] == 52:
             logger = logging.getLogger()
-            handler = logging.FileHandler('ftmiddle.log')
+            handler = logging.FileHandler('dinlenenler.log')
             logger.addHandler(handler)
-            logger.info(f"rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, rssi:{rxpk['rssi']:.2f}, size:{rxpk['size']:.0f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}")
+            logger.info(f"Dinlenenler : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, rssi:{rxpk['rssi']:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}")
 
 
 
