@@ -130,7 +130,7 @@ class GW2Miner:
 
     def handle_PUSH_DATA(self, msg, addr=None):
         """
-        take PUSH_DATA message will come from real gateways interfacing with this ftmiddle software.
+        take PUSH_DATA message will come from real gateways interfacing with this ftmiddle_for_incomes software.
         This function forwards de-duplicated received packets to all miners after potentially modifying metadata
         :param msg:
         :param addr:
@@ -189,15 +189,6 @@ class GW2Miner:
             data, addr = vgw.get_rxpks(copy.deepcopy(msg))
             if addr is None:
                 continue
-
-            if msg['data']['rxpk'] == 52:
-                logger = logging.getLogger()
-                handler = logging.FileHandler('ftmiddle.log')
-                logger.addHandler(handler)
-                logger.info(
-                f"rssi:{msg['data']['rxpk']['rssi']:.0f}, snr:{msg['data']['rxpk']['lsnr']:.0f}, size:{msg['data']['rxpk']['size']:.0f}, size:{msg['data']['rxpk']['size']:.0f}")
-                logger.info( f"------------")
-                logger.info( f"{data}")
 
             self.sock.sendto(data, addr)
 
@@ -317,7 +308,7 @@ def configure_logger(debug=False):
         format=logformat,
         datefmt='%Y/%m/%d %H:%M:%S',
         level=logging.DEBUG if debug else logging.INFO,
-        filename='ftmiddle.log',
+        filename='ftmiddle_for_incomes.log',
         filemode='a'
     )
     console = logging.StreamHandler()
@@ -332,7 +323,7 @@ def configure_logger(debug=False):
 def main():
     parser = argparse.ArgumentParser("forward data from multiple concentrators to multiple miners with coercing of metadata")
     parser.add_argument('-p', '--port', help='port to listen for gateway on', default=1681, type=int)
-    parser.add_argument('-c', '--configs', help='path where to locate gateway configs', default='/../home/ft/ftmiddle/gw_configs/', type=str)
+    parser.add_argument('-c', '--configs', help='path where to locate gateway configs', default='/../home/ft/ftmiddle_for_incomes/gw_configs/', type=str)
     parser.add_argument('-d', '--debug', action='store_true', help="print verbose debug messages")
     parser.add_argument('-k', '--keepalive', help='keep alive interval in seconds', default=10, type=int)
     parser.add_argument('-s', '--stat', help='stat interval in seconds', default=30, type=int)

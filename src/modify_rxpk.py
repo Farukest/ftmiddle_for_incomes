@@ -25,7 +25,7 @@ class RXMetadataModification:
         self.rx_adjust = rx_adjust
         self.logger = logging.getLogger('RXMeta')
 
-    def modify_rxpk(self, rxpk, src_mac=None, dest_mac=None):
+    def modify_rxpk(self, rxpk, server_address, src_mac=None, dest_mac=None):
         """
         JSON object
         :param rxpk: per PUSH_DATA https://github.com/Lora-net/packet_forwarder/blob/master/PROTOCOL.TXT
@@ -79,7 +79,9 @@ class RXMetadataModification:
             logger = logging.getLogger()
             handler = logging.FileHandler('ftmiddle.log')
             logger.addHandler(handler)
-            logger.info(f"rssis:{rxpk['rssis']:.0f}, snr:{rxpk['lsnr']:.0f}, rssi:{rxpk['rssi']:.0f}, size:{rxpk['size']:.0f}, size:{rxpk['size']:.0f}")
+            logger.info(f"rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, rssi:{rxpk['rssi']:.2f}, size:{rxpk['size']:.0f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}")
+
+
 
         return rxpk
 
