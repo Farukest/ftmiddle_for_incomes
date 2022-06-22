@@ -17,7 +17,7 @@ import datetime as dt
 
 class RXMetadataModification:
     def __init__(self, rx_adjust):
-        self.min_rssi = -120
+        self.min_rssi = -100
         self.max_rssi = -90  # valid to 50 miles via FSPL filter
         self.max_snr = 1.9
         self.min_snr = -9.9
@@ -37,11 +37,13 @@ class RXMetadataModification:
         # Simple RSSI level adjustment
         # rxpk['rssi'] += self.rx_adjust
     
-        # rxpk['lsnr'] = round(rxpk['lsnr'] + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
-        # # clip after adjustments to ensure result is still valid
-        # rxpk['rssi'] = min(self.max_rssi, max(self.min_rssi, rxpk['rssi']))
-        # rxpk['lsnr'] = min(self.max_snr,  max(self.min_snr,  rxpk['lsnr']))
-        # rxpk['lsnr'] = (round(rxpk['lsnr'] + random.randint(-35, 20) * 0.1, 1)) if self.min_snr > rxpk['lsnr'] else min(rxpk['lsnr'], self.max_snr)
+        rxpk['lsnr'] = round(rxpk['lsnr'] + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
+        minsnrnew = round(self.min_snr + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
+        # clip after adjustments to ensure result is still valid
+        rxpk['rssi'] = min(self.max_rssi, max(self.min_rssi, rxpk['rssi']))
+        rxpk['lsnr'] = min(self.max_snr,  max(minsnrnew,  rxpk['lsnr']))
+        # egerminsnrdenkucukseSNR = round(self.min_snr + random.randint(-45, 20) * 0.1, 1)
+        # rxpk['lsnr'] = round( egerminsnrdenkucukseSNR if self.min_snr > rxpk['lsnr'] else min(rxpk['lsnr'], self.max_snr) )
 
         # modify tmst (Internal timestamp of "RX finished" event (32b unsigned)) to be aligned to uS since midnight UTC
         # this will be discontinuous once a day but that is basically same effect as a gateway reset / forwarder reboot
@@ -77,8 +79,8 @@ class RXMetadataModification:
 
         if rxpk['size'] == 52:
             logger = logging.getLogger()
-            handler = logging.FileHandler('dinlenenler.log')
-            logger.addHandler(handler)
+            # handler = logging.FileHandler('dinlenenler.log')
+            # logger.addHandler(handler)
             logger.info(f"Dinlenenler : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, rssi:{rxpk['rssi']:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}")
 
 
