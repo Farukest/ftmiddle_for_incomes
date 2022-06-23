@@ -11,6 +11,7 @@ import json
 import time
 import logging
 import random
+import math
 import datetime as dt
 
 
@@ -19,8 +20,8 @@ class RXMetadataModification:
     def __init__(self, rx_adjust):
         self.min_rssi = -100
         self.max_rssi = -90  # valid to 50 miles via FSPL filter
-        self.max_snr = 1.9
-        self.min_snr = -9.9
+        self.max_snr = 3.2
+        self.min_snr = -14.8
         self.tmst_offset = 0
         self.rx_adjust = rx_adjust
         self.logger = logging.getLogger('RXMeta')
@@ -33,17 +34,22 @@ class RXMetadataModification:
         """
 
         old_snr, old_rssi, old_ts = rxpk['lsnr'], rxpk['rssi'], rxpk['tmst']
-        
+
         # Simple RSSI level adjustment
         # rxpk['rssi'] += self.rx_adjust
-    
-        rxpk['lsnr'] = round(rxpk['lsnr'] + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
+
+        # rxpk['lsnr'] = round(rxpk['lsnr'] + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
         minsnrnew = round(self.min_snr + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
         # clip after adjustments to ensure result is still valid
         rxpk['rssi'] = min(self.max_rssi, max(self.min_rssi, rxpk['rssi']))
-        rxpk['lsnr'] = min(self.max_snr,  max(minsnrnew,  rxpk['lsnr']))
-        # egerminsnrdenkucukseSNR = round(self.min_snr + random.randint(-45, 20) * 0.1, 1)
-        # rxpk['lsnr'] = round( egerminsnrdenkucukseSNR if self.min_snr > rxpk['lsnr'] else min(rxpk['lsnr'], self.max_snr) )
+        # rxpk['lsnr'] = min(self.max_snr,  max(minsnrnew,  rxpk['lsnr']))
+
+        lsnrmax = max(self.min_snr, rxpk['lsnr'])
+        number_list = [0, 0.2, 0.5, 0.8]
+        addvalues = math.floor(random.randint(-40, 50) * 0.1)
+        chosen_kusurat = random.choice(number_list)
+        lsnradded = math.floor(lsnrmax) + addvalues + chosen_kusurat
+        rxpk['lsnr'] = lsnradded
 
         # modify tmst (Internal timestamp of "RX finished" event (32b unsigned)) to be aligned to uS since midnight UTC
         # this will be discontinuous once a day but that is basically same effect as a gateway reset / forwarder reboot
