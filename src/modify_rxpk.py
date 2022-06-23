@@ -33,6 +33,14 @@ class RXMetadataModification:
         :return: object with metadata modified
         """
 
+
+        if rxpk['size'] == 52:
+            logger = logging.getLogger()
+            # handler = logging.FileHandler('dinlenenler.log')
+            # logger.addHandler(handler)
+            logger.info(f"Dinlenenler : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, dest_mac:{dest_mac}, server: {server_address}, tmst:{rxpk['tmst']:.2f}, data: {rxpk['data']}")
+            logger.info(f" - ")
+
         old_snr, old_rssi, old_ts = rxpk['lsnr'], rxpk['rssi'], rxpk['tmst']
 
         # Simple RSSI level adjustment
@@ -81,13 +89,6 @@ class RXMetadataModification:
             #  print(f"updated tmst_offset from:{self.tmst_offset} to {tmst_offset} (error: {self.tmst_offset - tmst_offset})")
             self.tmst_offset = tmst_offset
         self.logger.debug(f"modified packet from GW {src_mac[-8:]} to vGW {dest_mac[-8:]}, rssi:{old_rssi}->{rxpk['rssi']}, lsnr:{old_snr}->{rxpk['lsnr']:.1f}, tmst:{old_ts}->{rxpk['tmst']} {'GPS SYNC' if gps_valid else ''}")
-
-
-        if rxpk['size'] == 52:
-            logger = logging.getLogger()
-            # handler = logging.FileHandler('dinlenenler.log')
-            # logger.addHandler(handler)
-            logger.info(f"Dinlenenler : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, rssi:{rxpk['rssi']:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}")
 
 
 
