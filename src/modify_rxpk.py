@@ -47,17 +47,17 @@ class RXMetadataModification:
         # rxpk['rssi'] += self.rx_adjust
 
         # rxpk['lsnr'] = round(rxpk['lsnr'] + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
-        minsnrnew = round(self.min_snr + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
+        # minsnrnew = round(self.min_snr + random.randint(-15, 10) * 0.1, 1)  # randomize snr +/- 1dB in 0.1dB increments
         # clip after adjustments to ensure result is still valid
-        rxpk['rssi'] = min(self.max_rssi, max(self.min_rssi, rxpk['rssi']))
+        # rxpk['rssi'] = min(self.max_rssi, max(self.min_rssi, rxpk['rssi']))
         # rxpk['lsnr'] = min(self.max_snr,  max(minsnrnew,  rxpk['lsnr']))
 
-        lsnrmax = max(self.min_snr, rxpk['lsnr'])
-        number_list = [0, 0.2, 0.5, 0.8]
-        addvalues = math.floor(random.randint(-40, 50) * 0.1)
-        chosen_kusurat = random.choice(number_list)
-        lsnradded = math.floor(lsnrmax) + addvalues + chosen_kusurat
-        rxpk['lsnr'] = lsnradded
+        # lsnrmax = max(self.min_snr, rxpk['lsnr'])
+        # number_list = [0, 0.2, 0.5, 0.8]
+        # addvalues = math.floor(random.randint(-40, 50) * 0.1)
+        # chosen_kusurat = random.choice(number_list)
+        # lsnradded = math.floor(lsnrmax) + addvalues + chosen_kusurat
+        # rxpk['lsnr'] = lsnradded
 
         # modify tmst (Internal timestamp of "RX finished" event (32b unsigned)) to be aligned to uS since midnight UTC
         # this will be discontinuous once a day but that is basically same effect as a gateway reset / forwarder reboot
