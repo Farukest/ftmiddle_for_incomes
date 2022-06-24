@@ -25,6 +25,9 @@ class RXMetadataModification:
         self.tmst_offset = 0
         self.rx_adjust = rx_adjust
         self.logger = logging.getLogger('RXMeta')
+        self.loggerr = logging.getLogger()
+        handler = logging.FileHandler('/home/ft/logs/listened.log')
+        self.loggerr.addHandler(handler)
 
     def modify_rxpk(self, rxpk, server_address, src_mac=None, dest_mac=None):
         """
@@ -33,15 +36,9 @@ class RXMetadataModification:
         :return: object with metadata modified
         """
 
+        old_snr, old_rssi, old_ts, old_rssis = rxpk['lsnr'], rxpk['rssi'], rxpk['tmst'], rxpk['rssis']
 
-        if rxpk['size'] == 52:
-            logger = logging.getLogger()
-            # handler = logging.FileHandler('dinlenenler.log')
-            # logger.addHandler(handler)
-            logger.info(f"Dinlenenler : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, dest_mac:{dest_mac}, server: {server_address}, tmst:{rxpk['tmst']:.2f}, data: {rxpk['data']}")
-            logger.info(f" - ")
 
-        old_snr, old_rssi, old_ts = rxpk['lsnr'], rxpk['rssi'], rxpk['tmst']
 
         # Simple RSSI level adjustment
         # rxpk['rssi'] += self.rx_adjust
@@ -52,12 +49,15 @@ class RXMetadataModification:
         # rxpk['rssi'] = min(self.max_rssi, max(self.min_rssi, rxpk['rssi']))
         # rxpk['lsnr'] = min(self.max_snr,  max(minsnrnew,  rxpk['lsnr']))
 
-        # lsnrmax = max(self.min_snr, rxpk['lsnr'])
-        # number_list = [0, 0.2, 0.5, 0.8]
-        # addvalues = math.floor(random.randint(-40, 50) * 0.1)
-        # chosen_kusurat = random.choice(number_list)
-        # lsnradded = math.floor(lsnrmax) + addvalues + chosen_kusurat
-        # rxpk['lsnr'] = lsnradded
+        number_list_for_rssi = [-3, -2, -1, 1, 2, 3]
+        rxpk['rssis'] = rxpk['rssis'] + random.choice(number_list_for_rssi)
+
+        lsnrmax = max(self.min_snr, rxpk['lsnr'])
+        number_list = [0, 0.2, 0.5, 0.8]
+        addvalues = math.floor(random.randint(-30, 30) * 0.1)
+        chosen_kusurat = random.choice(number_list)
+        lsnradded = math.floor(lsnrmax) + addvalues + chosen_kusurat
+        rxpk['lsnr'] = round(lsnradded, 1)
 
         # modify tmst (Internal timestamp of "RX finished" event (32b unsigned)) to be aligned to uS since midnight UTC
         # this will be discontinuous once a day but that is basically same effect as a gateway reset / forwarder reboot
@@ -90,6 +90,10 @@ class RXMetadataModification:
             self.tmst_offset = tmst_offset
         self.logger.debug(f"modified packet from GW {src_mac[-8:]} to vGW {dest_mac[-8:]}, rssi:{old_rssi}->{rxpk['rssi']}, lsnr:{old_snr}->{rxpk['lsnr']:.1f}, tmst:{old_ts}->{rxpk['tmst']} {'GPS SYNC' if gps_valid else ''}")
 
+        if rxpk['size'] == 52:
+
+            self.loggerr.info(f"Minerlardan Gelen : rssis:{old_rssis:.2f}, snr:{old_snr:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}, tmst:{old_ts:.2f}, freq:{rxpk['freq']:.2f}")
+            self.loggerr.info(f"Local Minera Pushlanan : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}, tmst:{rxpk['tmst']:.2f}, freq:{rxpk['freq']:.2f}\n")
 
 
         return rxpk
