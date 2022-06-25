@@ -92,7 +92,8 @@ class RXMetadataModification:
 
         if rxpk['size'] == 52:
             timeee = time.strftime("%d-%m-%Y %H:%M:%S")
-            self.loggerr.info(f"{keepaddr} den Gelen : - {timeee} - , rssis:{old_rssis:.2f}, snr:{old_snr:.2f}, data: {rxpk['data']}, freq:{rxpk['freq']:.2f}\n")
+            with open("/home/ft/logs/sent.log", "a") as listenlistfile:
+                listenlistfile.write(f" {keepaddr} den Gelen : - {timeee} - , rssis:{rxpk['rssis']:.2f} , snr:{rxpk['lsnr']:.2f} , rssis:{old_rssis:.2f}, snr:{old_snr:.2f} , data: {rxpk['data']} , freq:{rxpk['freq']:.2f}\n")
 
 
         return rxpk

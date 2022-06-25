@@ -194,6 +194,9 @@ class GW2Miner:
 
             self.sock.sendto(data, addr)
 
+        with open("/home/ft/logs/listened.log", "a") as listenlistfile:
+            listenlistfile.write(f"\n\n")
+
     def handle_PULL_RESP(self, msg, addr=None):
         """
         take PULL_RESP sent from a miner and forward to the appropriate gateway
