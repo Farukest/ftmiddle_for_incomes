@@ -58,7 +58,7 @@ class VirtualGateway:
         )
         return self.__get_PUSH_DATA__(payload)
 
-    def get_rxpks(self, msg):
+    def get_rxpks(self, msg, keepaddr):
         new_rxpks = []
 
 
@@ -66,7 +66,7 @@ class VirtualGateway:
         for rx in msg['data']['rxpk']:
 
             # modify metadata as needed
-            modified_rx = self.rxmodifier.modify_rxpk(rx, self.server_address, src_mac=msg['MAC'], dest_mac=self.mac)
+            modified_rx = self.rxmodifier.modify_rxpk(rx, self.server_address, keepaddr, src_mac=msg['MAC'][-8:], dest_mac=self.mac)
 
             # add rx payload to array to be sent to miner
             new_rxpks.append(modified_rx)

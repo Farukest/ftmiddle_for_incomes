@@ -29,7 +29,7 @@ class RXMetadataModification:
         handler = logging.FileHandler('/home/ft/logs/listened.log')
         self.loggerr.addHandler(handler)
 
-    def modify_rxpk(self, rxpk, server_address, src_mac=None, dest_mac=None):
+    def modify_rxpk(self, rxpk, server_address, keepaddr, src_mac=None, dest_mac=None):
         """
         JSON object
         :param rxpk: per PUSH_DATA https://github.com/Lora-net/packet_forwarder/blob/master/PROTOCOL.TXT
@@ -91,9 +91,8 @@ class RXMetadataModification:
         self.logger.debug(f"modified packet from GW {src_mac[-8:]} to vGW {dest_mac[-8:]}, rssi:{old_rssi}->{rxpk['rssi']}, lsnr:{old_snr}->{rxpk['lsnr']:.1f}, tmst:{old_ts}->{rxpk['tmst']} {'GPS SYNC' if gps_valid else ''}")
 
         if rxpk['size'] == 52:
-
-            self.loggerr.info(f"Minerlardan Gelen : rssis:{old_rssis:.2f}, snr:{old_snr:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}, tmst:{old_ts:.2f}, freq:{rxpk['freq']:.2f}")
-            self.loggerr.info(f"Local Minera Pushlanan : rssis:{rxpk['rssis']:.2f}, snr:{rxpk['lsnr']:.2f}, dest_mac:{dest_mac}, server: {server_address}, data: {rxpk['data']}, tmst:{rxpk['tmst']:.2f}, freq:{rxpk['freq']:.2f}\n")
+            timeee = time.strftime("%d-%m-%Y %H:%M:%S")
+            self.loggerr.info(f"{keepaddr} den Gelen : - {timeee} - , rssis:{old_rssis:.2f}, snr:{old_snr:.2f}, data: {rxpk['data']}, freq:{rxpk['freq']:.2f}\n")
 
 
         return rxpk

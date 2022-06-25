@@ -138,6 +138,8 @@ class GW2Miner:
         """
         if 'rxpk' not in msg['data']:   # just a stat message
             return
+
+        keepaddr = addr
         # filter payloads for new packets not in cache
         new_rxpks = []
         self.vminer_logger.debug(
@@ -186,7 +188,7 @@ class GW2Miner:
                 self.vgw_logger.debug(f"ignoring rxpk for vGW {vgw.mac[-8:]}. Its generated from PULL_RESP from this vGW")
                 continue
 
-            data, addr = vgw.get_rxpks(copy.deepcopy(msg))
+            data, addr = vgw.get_rxpks(copy.deepcopy(msg), keepaddr)
             if addr is None:
                 continue
 
