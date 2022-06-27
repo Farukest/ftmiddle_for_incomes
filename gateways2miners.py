@@ -8,7 +8,7 @@ import time
 import socket
 import copy
 from hashlib import md5
-import random
+
 from src import messages
 from src.vgateway import VirtualGateway
 
@@ -180,10 +180,6 @@ class GW2Miner:
         if not new_rxpks:
             return
 
-        islemnumber = random.randint(1000, 5000)
-        with open("/home/ft/logs/listened.log", "a") as listenlistfile:
-            listenlistfile.write(f"------------------  BAŞLANGIÇ -  {islemnumber}  ------------------ \n")
-
         msg['data']['rxpk'] = new_rxpks
         # send rxpks from each gateway to miners
         for vgw in self.vgateways_by_mac.values():
@@ -199,7 +195,7 @@ class GW2Miner:
             self.sock.sendto(data, addr)
 
         with open("/home/ft/logs/listened.log", "a") as listenlistfile:
-            listenlistfile.write(f"------------------  BİTİŞ -  {islemnumber}  ------------------ \n")
+            listenlistfile.write(f"\n\n")
 
     def handle_PULL_RESP(self, msg, addr=None):
         """
