@@ -338,7 +338,7 @@ def main():
 
     args = parser.parse_args()
 
-    configure_logger(args.debug)
+    # configure_logger(args.debug)
 
     logging.info(f"info log messages are enabled")
     logging.debug(f"debug log messages are enabled")
