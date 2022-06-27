@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="Shambolic" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="Shambolic" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="Goose">
         <serverdata>
@@ -26,7 +27,7 @@
       <paths name="Shambolic">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/ft/ftmiddle_for_incomes" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/tmp/ftmiddle_for_incomes/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

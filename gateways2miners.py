@@ -194,8 +194,9 @@ class GW2Miner:
 
             self.sock.sendto(data, addr)
 
-        with open("/home/ft/logs/listened.log", "a") as listenlistfile:
-            listenlistfile.write(f"\n\n")
+        if msg['data']['rxpk'][0]['size'] == 52:
+            with open("/home/ft/logs/listened.log", "a") as listenlistfile:
+                listenlistfile.write(f"\n\n")
 
     def handle_PULL_RESP(self, msg, addr=None):
         """
@@ -327,7 +328,7 @@ def configure_logger(debug=False):
 
 def main():
     parser = argparse.ArgumentParser("forward data from multiple concentrators to multiple miners with coercing of metadata")
-    parser.add_argument('-p', '--port', help='port to listen for gateway on', default=1681, type=int)
+    parser.add_argument('-p', '--port', help='port to listen for gateway on', default=1683, type=int)
     parser.add_argument('-c', '--configs', help='path where to locate gateway configs', default='/../home/ft/ftmiddle_for_incomes/gw_configs/', type=str)
     parser.add_argument('-d', '--debug', action='store_true', help="print verbose debug messages")
     parser.add_argument('-k', '--keepalive', help='keep alive interval in seconds', default=10, type=int)
