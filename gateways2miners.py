@@ -328,7 +328,7 @@ def configure_logger(debug=False):
 
 def main():
     parser = argparse.ArgumentParser("forward data from multiple concentrators to multiple miners with coercing of metadata")
-    parser.add_argument('-p', '--port', help='port to listen for gateway on', default=1683, type=int)
+    parser.add_argument('-p', '--port', help='port to listen for gateway on', default=1681, type=int)
     parser.add_argument('-c', '--configs', help='path where to locate gateway configs', default='/../home/ft/ftmiddle_for_incomes/gw_configs/', type=str)
     parser.add_argument('-d', '--debug', action='store_true', help="print verbose debug messages")
     parser.add_argument('-k', '--keepalive', help='keep alive interval in seconds', default=10, type=int)
